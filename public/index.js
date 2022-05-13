@@ -23,6 +23,16 @@ const findHighest = (values) => {
   return highest;
 };
 
+const calculateAverage = (values) => {
+  let highest = 0;
+  values.forEach((value) => {
+    if (parseFloat(value.high) > highest) {
+      highest = value.high;
+    }
+  });
+  return highest;
+};
+
 const main = async () => {
   const timeChartCanvas = document.querySelector("#time-chart");
   const highestPriceChartCanvas = document.querySelector(
