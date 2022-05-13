@@ -15,13 +15,13 @@ const getColor = (stock) => {
 
 const findHighest = (values) => {
   let highest = 0;
-  values.forEach(value => {
+  values.forEach((value) => {
     if (parseFloat(value.high) > highest) {
-      highest = value.high
+      highest = value.high;
     }
-  })
-  return highest
-}
+  });
+  return highest;
+};
 
 const main = async () => {
   const timeChartCanvas = document.querySelector("#time-chart");
@@ -54,25 +54,35 @@ const main = async () => {
     },
   });
 
-  new Chart(highestPriceChartCanvas.getContext('2d'), {
-    type: 'bar',
+  new Chart(highestPriceChartCanvas.getContext("2d"), {
+    type: "bar",
     data: {
-        labels: stocks.map(stock => stock.meta.symbol),
-        datasets: [{
-            label: 'Highest',
-            backgroundColor: stocks.map(stock => (
-                getColor(stock.meta.symbol)
-            )),
-            borderColor: stocks.map(stock => (
-                getColor(stock.meta.symbol)
-            )),
-            data: stocks.map(stock => (
-                findHighest(stock.values)
-            ))
-        }]
-    }
-});
-};
+      labels: stocks.map((stock) => stock.meta.symbol),
+      datasets: [
+        {
+          label: "Highest",
+          backgroundColor: stocks.map((stock) => getColor(stock.meta.symbol)),
+          borderColor: stocks.map((stock) => getColor(stock.meta.symbol)),
+          data: stocks.map((stock) => findHighest(stock.values)),
+        },
+      ],
+    },
+  });
 
+  new Chart(averagePriceChartCanvas.getContext("2d"), {
+    type: "pie",
+    data: {
+      labels: stocks.map((stock) => stock.meta.symbol),
+      datasets: [
+        {
+          label: "Average",
+          backgroundColor: stocks.map((stock) => getColor(stock.meta.symbol)),
+          borderColor: stocks.map((stock) => getColor(stock.meta.symbol)),
+          data: stocks.map((stock) => calculateAverage(stock.values)),
+        },
+      ],
+    },
+  });
+};
 
 main();
