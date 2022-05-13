@@ -1,3 +1,28 @@
+const getColor = (stock) => {
+  if (stock === "GME") {
+    return "rgba(61, 161, 61, 0.7)";
+  }
+  if (stock === "MSFT") {
+    return "rgba(209, 4, 25, 0.7)";
+  }
+  if (stock === "DIS") {
+    return "rgba(18, 4, 209, 0.7)";
+  }
+  if (stock === "BNTX") {
+    return "rgba(166, 43, 158, 0.7)";
+  }
+};
+
+const findHighest = (values) => {
+  let highest = 0;
+  values.forEach(value => {
+    if (parseFloat(value.high) > highest) {
+      highest = value.high
+    }
+  })
+  return highest
+}
+
 const main = async () => {
   const timeChartCanvas = document.querySelector("#time-chart");
   const highestPriceChartCanvas = document.querySelector(
@@ -28,20 +53,26 @@ const main = async () => {
       })),
     },
   });
+
+  new Chart(highestPriceChartCanvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: stocks.map(stock => stock.meta.symbol),
+        datasets: [{
+            label: 'Highest',
+            backgroundColor: stocks.map(stock => (
+                getColor(stock.meta.symbol)
+            )),
+            borderColor: stocks.map(stock => (
+                getColor(stock.meta.symbol)
+            )),
+            data: stocks.map(stock => (
+                findHighest(stock.values)
+            ))
+        }]
+    }
+});
 };
-function getColor(stock) {
-  if (stock === "GME") {
-    return "rgba(61, 161, 61, 0.7)";
-  }
-  if (stock === "MSFT") {
-    return "rgba(209, 4, 25, 0.7)";
-  }
-  if (stock === "DIS") {
-    return "rgba(18, 4, 209, 0.7)";
-  }
-  if (stock === "BNTX") {
-    return "rgba(166, 43, 158, 0.7)";
-  }
-}
+
 
 main();
