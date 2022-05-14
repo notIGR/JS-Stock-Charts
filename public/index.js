@@ -13,24 +13,21 @@ const getColor = (stock) => {
   }
 };
 
-const findHighest = (values) => {
-  let highest = 0;
-  values.forEach((value) => {
-    if (parseFloat(value.high) > highest) {
-      highest = value.high;
+const findHighest = (values) =>
+  values.reduce((highestValue, currentValue) => {
+    if (parseFloat(currentValue.high) > highestValue) {
+      return parseFloat(currentValue.high);
+    } else {
+      return highestValue;
     }
-  });
-  return highest;
-};
+  }, 0);
 
 const calculateAverage = (values) => {
-  let highest = 0;
-  values.forEach((value) => {
-    if (parseFloat(value.high) > highest) {
-      highest = value.high;
-    }
-  });
-  return highest;
+  const total = values.reduce(
+    (totalValue, currentStock) => totalValue + parseFloat(currentStock.high),
+    0
+  );
+  return total / values.length;
 };
 
 const main = async () => {
@@ -46,7 +43,6 @@ const main = async () => {
     "https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=fea75586ff664876bc76e2f7556f6387"
   );
   const data = await response.json();
-  console.log(data);
   const { GME, MSFT, DIS, BNTX } = data;
   const stocks = [GME, MSFT, DIS, BNTX];
   stocks.forEach((stock) => stock.values.reverse());
